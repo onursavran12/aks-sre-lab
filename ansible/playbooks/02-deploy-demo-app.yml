@@ -1,0 +1,35 @@
+---
+- name: Deploy demo application and routing
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Apply demo namespace
+      kubernetes.core.k8s:
+        state: present
+        src: ../../k8s/apps/demo-app/namespace.yaml
+
+    - name: Apply demo deployment
+      kubernetes.core.k8s:
+        state: present
+        src: ../../k8s/apps/demo-app/deployment.yaml
+
+    - name: Apply demo service
+      kubernetes.core.k8s:
+        state: present
+        src: ../../k8s/apps/demo-app/service.yaml
+
+    - name: Apply Istio Gateway
+      kubernetes.core.k8s:
+        state: present
+        src: ../../k8s/apps/demo-app/istio-gateway.yaml
+
+    - name: Apply Istio HTTPRoute
+      kubernetes.core.k8s:
+        state: present
+        src: ../../k8s/apps/demo-app/istio-httproute.yaml
+
+    - name: Apply APISIX route
+      kubernetes.core.k8s:
+        state: present
+        src: ../../k8s/apps/demo-app/apisix-route.yaml

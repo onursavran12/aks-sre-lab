@@ -1,0 +1,19 @@
+---
+- name: Connect local kubeconfig to AKS
+  hosts: localhost
+  connection: local
+  vars_files:
+    - "ansible/group_vars/all.yml"
+
+  tasks:
+    - name: Get AKS credentials
+      ansible.builtin.command: >
+        az aks get-credentials
+        --resource-group {{ azure_resource_group }}
+        --name {{ aks_cluster_name }}
+        --overwrite-existing
+      changed_when: false
+
+    - name: Check Kubernetes nodes
+      ansible.builtin.command: kubectl get nodes
+      changed_when: false

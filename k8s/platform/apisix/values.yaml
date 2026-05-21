@@ -1,0 +1,13 @@
+dashboard:
+  enabled: false
+
+gateway:
+  type: LoadBalancer
+
+ingress-controller:
+  enabled: true
+  config:
+    apisix:
+      serviceNamespace: apisix
+    kubernetes:
+      enableGatewayAPI: true

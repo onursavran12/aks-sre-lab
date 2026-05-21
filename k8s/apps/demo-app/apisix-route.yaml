@@ -1,0 +1,16 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: demo-apisix-route
+  namespace: demo
+spec:
+  http:
+    - name: demo
+      match:
+        hosts:
+          - demo-apisix.local
+        paths:
+          - /*
+      backends:
+        - serviceName: demo-app
+          servicePort: 80

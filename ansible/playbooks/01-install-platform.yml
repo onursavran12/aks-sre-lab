@@ -1,0 +1,69 @@
+---
+- name: Install platform components on AKS
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Add Istio Helm repo
+      kubernetes.core.helm_repository:
+        name: istio
+        repo_url: https://istio-release.storage.googleapis.com/charts
+
+    - name: Add Prometheus community Helm repo
+      kubernetes.core.helm_repository:
+        name: prometheus-community
+        repo_url: https://prometheus-community.github.io/helm-charts
+
+    - name: Add APISIX Helm repo
+      kubernetes.core.helm_repository:
+        name: apisix
+        repo_url: https://apache.github.io/apisix-helm-chart
+
+    - name: Update Helm repos
+      ansible.builtin.command: helm repo update
+      changed_when: false
+
+    - name: Install Gateway API CRDs
+      ansible.builtin.command: >
+        kubectl apply -f
+        https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
+      changed_when: false
+
+    - name: Install Istio base
+      kubernetes.core.helm:
+        name: istio-base
+        chart_ref: istio/base
+        release_namespace: istio-system
+        create_namespace: true
+        wait: true
+
+    - name: Install Istiod
+      kubernetes.core.helm:
+        name: istiod
+        chart_ref: istio/istiod
+        release_namespace: istio-system
+        create_namespace: true
+        wait: true
+
+    - name: Install kube-prometheus-stack
+      kubernetes.core.helm:
+        name: kube-prometheus-stack
+        chart_ref: prometheus-community/kube-prometheus-stack
+        release_namespace: monitoring
+        create_namespace: true
+        wait: true
+        values_files:
+          - ../../k8s/platform/monitoring/kube-prometheus-stack-values.yaml
+        set_values:
+          - value: grafana.adminPassword={{ grafana_admin_password }}
+            value_type: string
+
+    - name: Install APISIX
+      kubernetes.core.helm:
+        name: apisix
+        chart_ref: apisix/apisix
+        release_namespace: apisix
+        create_namespace: true
+        wait: true
+        values_files:
+          - ../../k8s/platform/apisix/values.yaml

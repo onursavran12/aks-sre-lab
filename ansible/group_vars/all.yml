@@ -1,0 +1,7 @@
+---
+azure_resource_group: "rg-aks-sre-lab-dev"
+azure_aks_name: "aks-sre-lab-dev"
+project_name: "aks-sre-lab"
+environment_name: "dev"
+
+grafana_admin_password: "{{ lookup('env', 'GRAFANA_ADMIN_PASSWORD') | default('ChangeMe123!', true) }}"
