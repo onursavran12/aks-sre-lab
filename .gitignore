@@ -27,3 +27,24 @@ kubeconfig
 
 # VS Code local
 .vscode/*.local.json
+
+# Terraform local backend and sensitive config
+**/backend.hcl
+**/terraform.tfvars
+**/*.tfvars
+**/*.tfvars.json
+!**/*.tfvars.example
+
+# Terraform local data/state
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Local kubeconfig and secrets
+*kubeconfig*
+*.pem
+*.key
+*.pfx
+.env
