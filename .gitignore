@@ -1,0 +1,29 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Secrets
+.env
+*.pem
+*.key
+*.pfx
+*.kubeconfig
+kubeconfig
+
+# macOS
+.DS_Store
+
+# Ansible
+*.retry
+
+# VS Code local
+.vscode/*.local.json
